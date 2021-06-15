@@ -22,20 +22,29 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        get request parameters for userID and password
-        String user=req.getParameter("user");
-        String pwd=req.getParameter("pwd");
+        String user = req.getParameter("user");
+        String pwd = req.getParameter("pwd");
+
+        String userNameValid = "^[A-Z]{1}[a-zA-Z]{2,}";
+        if (!user.matches(userNameValid)) {
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.html");
+            PrintWriter out = resp.getWriter();
+            out.println("<font color=red> Enter the correct username...!!!</font>");
+            requestDispatcher.include(req, resp);
+        } else {
 
 //        Get servlet config init params
-        String userID=getServletConfig().getInitParameter("user");
-        String password=getServletConfig().getInitParameter("password");
-        if (userID.equals(user) && password.equals(pwd)){
-            req.setAttribute("user",user);
-            req.getRequestDispatcher("LoginSuccess.jsp").forward(req,resp);
-        }else {
-            RequestDispatcher requestDispatcher= getServletContext().getRequestDispatcher("/login.html");
-            PrintWriter out=resp.getWriter();
-            out.println("<font color=red> Either username or password is wrong.</font>");
-            requestDispatcher.include(req,resp);
+            String userID = getServletConfig().getInitParameter("user");
+            String password = getServletConfig().getInitParameter("password");
+            if (userID.equals(user) && password.equals(pwd)) {
+                req.setAttribute("user", user);
+                req.getRequestDispatcher("LoginSuccess.jsp").forward(req, resp);
+            } else {
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.html");
+                PrintWriter out = resp.getWriter();
+                out.println("<font color=red> Either username or password is wrong.</font>");
+                requestDispatcher.include(req, resp);
+            }
         }
     }
 }
