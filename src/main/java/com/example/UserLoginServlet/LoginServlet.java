@@ -15,7 +15,7 @@ import java.io.PrintWriter;
         urlPatterns = {"/LoginServlet"},
         initParams = {
                 @WebInitParam(name = "user",value = "Naman"),
-                @WebInitParam(name = "password",value = "Hello")
+                @WebInitParam(name = "password",value = "Spider@6426")
         }
 )
 public class LoginServlet extends HttpServlet {
@@ -26,12 +26,18 @@ public class LoginServlet extends HttpServlet {
         String pwd = req.getParameter("pwd");
 
         String userNameValid = "^[A-Z]{1}[a-zA-Z]{2,}";
+        String passwordValid="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&+=])(?=\\S+$).{8,}";
         if (!user.matches(userNameValid)) {
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.html");
             PrintWriter out = resp.getWriter();
             out.println("<font color=red> Enter the correct username...!!!</font>");
             requestDispatcher.include(req, resp);
-        } else {
+        } else if (!pwd.matches(passwordValid)) {
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.html");
+            PrintWriter out = resp.getWriter();
+            out.println("<font color=red> Enter the correct valid password...!!!</font>");
+            requestDispatcher.include(req, resp);
+        }else {
 
 //        Get servlet config init params
             String userID = getServletConfig().getInitParameter("user");
